@@ -23,7 +23,7 @@ def get_start_keyboard():
     )
     return keyboard
 
-# Создаем инлайн-клавиатуру для инструкции (только кнопка "Получить ссылку")
+# Создаем инлайн-клавиатуру для инструкции (только кнопка "соси")
 def get_instruction_keyboard():
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
