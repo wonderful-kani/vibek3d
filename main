@@ -7,7 +7,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 logging.basicConfig(level=logging.INFO)
 
 # Токен бота (замените на ваш токен)
-BOT_TOKEN = "8597463700:AAE8HPBC94K0qSlJoV1VTGqCEclibyxbyUQ"
+BOT_TOKEN = "8563382011:AAFLhOQ0QvKOfBjewh9-Oa4SFzz64stfggg"
 
 # Инициализация бота и диспетчера
 bot = Bot(token=BOT_TOKEN)
@@ -23,11 +23,11 @@ def get_start_keyboard():
     )
     return keyboard
 
-# Создаем инлайн-клавиатуру для инструкции (только кнопка "соси")
+# Создаем инлайн-клавиатуру для инструкции (только кнопка "Получить ссылку")
 def get_instruction_keyboard():
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text="отсосать", callback_data="link")]
+            [InlineKeyboardButton(text="Получить ссылку", callback_data="link")]
         ]
     )
     return keyboard
