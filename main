@@ -1,0 +1,91 @@
+import logging
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters import Command
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+# Настройка логирования
+logging.basicConfig(level=logging.INFO)
+
+# Токен бота (замените на ваш токен)
+BOT_TOKEN = "8597463700:AAE8HPBC94K0qSlJoV1VTGqCEclibyxbyUQ"
+
+# Инициализация бота и диспетчера
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher()
+
+# Создаем инлайн-клавиатуру для стартового сообщения
+def get_start_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Инструкция", callback_data="instruction")],
+            [InlineKeyboardButton(text="Получить ссылку", callback_data="link")]
+        ]
+    )
+    return keyboard
+
+# Создаем инлайн-клавиатуру для инструкции (только кнопка "Получить ссылку")
+def get_instruction_keyboard():
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Получить ссылку", callback_data="link")]
+        ]
+    )
+    return keyboard
+
+@dp.message(Command("start"))
+async def cmd_start(message: types.Message):
+    await message.answer(
+        "Выберите одно из предложений",
+        reply_markup=get_start_keyboard()
+    )
+
+@dp.message(Command("instruction"))
+async def cmd_instruction(message: types.Message):
+    await message.answer(
+        "Что бы получить 500р\n"
+        "Выполнить все следующие условия:\n"
+        "- получить пластиковую карту и открыть текущий "
+        "счёт;\n"
+        "- Совершить 5 покупок по карте\n"
+        "Покупка по карте на любую суммую\n"
+        "-Пластиковую карту привезут до дома в удобный для "
+        "вас день",
+        reply_markup=get_instruction_keyboard()
+    )
+
+@dp.message(Command("link"))
+async def cmd_link(message: types.Message):
+    await message.answer("Привет, это Альфа-Банк. Дарим 500 ₽ за оформление Альфа-Карты по ссылке и до 100% кэшбэка в Золотом Яблоке до 4 января: https://alfa.me/iwg7oi")
+
+# Обработчики для инлайн-кнопок
+@dp.callback_query(lambda c: c.data == "instruction")
+async def handle_instruction_callback(callback_query: types.CallbackQuery):
+    await callback_query.message.edit_text(
+        "Что бы получить 500р\n"
+        "Выполнить все следующие условия:\n"
+        "- получить пластиковую карту и открыть текущий "
+        "счёт;\n"
+        "- Совершить 5 покупок по карте\n"
+        "Покупка по карте на любую суммую\n"
+        "-Пластиковую карту привезут до дома в удобный для "
+        "вас день",
+        reply_markup=get_instruction_keyboard()
+    )
+    await callback_query.answer()
+
+@dp.callback_query(lambda c: c.data == "link")
+async def handle_link_callback(callback_query: types.CallbackQuery):
+    # Отправляем новое сообщение вместо редактирования предыдущего
+    await callback_query.message.answer(
+        "Привет, это Альфа-Банк. Дарим 500 ₽ за оформление Альфа-Карты по ссылке и до 100% кэшбэка в Золотом Яблоке до 4 января: https://alfa.me/iwg7oi\n\n"
+        "Альфа-Карта — это бесплатное обслуживание, кэшбэк каждый месяц и много классных предложений от наших партнёров ❤️"
+    )
+    await callback_query.answer()
+
+async def main():
+    print("Бот запущен...")
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
